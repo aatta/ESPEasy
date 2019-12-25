@@ -184,6 +184,20 @@ boolean Plugin_001(byte function, struct EventStruct *event, String& string)
           {
             pinMode(event->Par1, OUTPUT);
             digitalWrite(event->Par1, event->Par2);
+
+            //Abdullah's changes
+            // if (Settings.PinBootStates[event->Par1] != event->Par2 + 1)
+            // {
+            //   Settings.PinBootStates[event->Par1] = event->Par2 + 1;        //Save GPIO settings
+            //   SaveSettings();
+            // }
+            // else
+            // {
+            //   String logEx = "";
+            //   logEx = String(F("SW   : GPIO ")) + String(event->Par1) + String(F(" was already set to ")) + String(event->Par2);
+            //   addLog(LOG_LEVEL_INFO, logEx);
+            // }
+
             setPinState(PLUGIN_ID_001, event->Par1, PIN_MODE_OUTPUT, event->Par2);
             log = String(F("SW   : GPIO ")) + String(event->Par1) + String(F(" Set to ")) + String(event->Par2);
             addLog(LOG_LEVEL_INFO, log);

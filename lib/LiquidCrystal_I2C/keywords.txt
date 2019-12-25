@@ -5,7 +5,6 @@
 ###########################################
 # Datatypes (KEYWORD1)
 ###########################################
-
 LiquidCrystal_I2C	KEYWORD1
 
 ###########################################
@@ -29,6 +28,7 @@ shiftIncrement	KEYWORD2
 shiftDecrement	KEYWORD2
 noBacklight	KEYWORD2
 backlight	KEYWORD2
+getBacklight	KEYWORD2
 autoscroll	KEYWORD2
 noAutoscroll	KEYWORD2
 createChar	KEYWORD2
