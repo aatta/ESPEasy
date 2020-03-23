@@ -1,14 +1,16 @@
+#ifdef USES_P072
 //######################################################################################################
 //####################### Plugin 072: Temperature and Humidity sensor HDC1080 (I2C) ####################
 //######################################################################################################
 
-#ifdef PLUGIN_BUILD_TESTING
 
 #define PLUGIN_072
 #define PLUGIN_ID_072         72
 #define PLUGIN_NAME_072       "Environment - HDC1080 (I2C) [TESTING]"
 #define PLUGIN_VALUENAME1_072 "Temperature"
 #define PLUGIN_VALUENAME2_072 "Humidity"
+
+#include "_Plugin_Helper.h"
 
 boolean Plugin_072_init = false;
 
@@ -90,9 +92,12 @@ boolean Plugin_072(byte function, struct EventStruct *event, String& string)
         log = F("HDC1080: Humidity: ");
         log += UserVar[event->BaseVarIndex + 1];
         addLog(LOG_LEVEL_INFO, log);
+        success = true;
+        break;
+
       }
   }
   return success;
 }
 
-#endif
+#endif // USES_P072

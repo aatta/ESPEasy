@@ -1,6 +1,9 @@
+#ifdef USES_P007
 //#######################################################################################################
 //#################################### Plugin 007: ExtWiredAnalog #######################################
 //#######################################################################################################
+
+#include "_Plugin_Helper.h"
 
 #define PLUGIN_007
 #define PLUGIN_ID_007         7
@@ -11,7 +14,7 @@ boolean Plugin_007(byte function, struct EventStruct *event, String& string)
 {
   boolean success = false;
 
-  static byte portValue = 0;
+  // static byte portValue = 0;
 
   switch (function)
   {
@@ -45,8 +48,8 @@ boolean Plugin_007(byte function, struct EventStruct *event, String& string)
 
     case PLUGIN_READ:
       {
-        byte unit = (Settings.TaskDevicePort[event->TaskIndex] - 1) / 4;
-        byte port = Settings.TaskDevicePort[event->TaskIndex] - (unit * 4);
+        byte unit = (CONFIG_PORT - 1) / 4;
+        byte port = CONFIG_PORT - (unit * 4);
         uint8_t address = 0x48 + unit;
 
         // get the current pin value
@@ -69,4 +72,4 @@ boolean Plugin_007(byte function, struct EventStruct *event, String& string)
   }
   return success;
 }
-
+#endif // USES_P007

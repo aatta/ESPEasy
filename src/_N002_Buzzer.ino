@@ -1,3 +1,4 @@
+#ifdef USES_N002
 //#######################################################################################################
 //########################### Notification Plugin 002: Buzzer ###########################################
 //#######################################################################################################
@@ -6,13 +7,13 @@
 #define NPLUGIN_ID_002         2
 #define NPLUGIN_NAME_002       "Buzzer"
 
-boolean NPlugin_002(byte function, struct EventStruct *event, String& string)
+boolean NPlugin_002(NPlugin::Function function, struct EventStruct *event, String& string)
 {
   boolean success = false;
 
   switch (function)
   {
-    case NPLUGIN_PROTOCOL_ADD:
+    case NPlugin::Function::NPLUGIN_PROTOCOL_ADD:
       {
         Notification[++notificationCount].Number = NPLUGIN_ID_002;
         Notification[notificationCount].usesMessaging = false;
@@ -20,35 +21,44 @@ boolean NPlugin_002(byte function, struct EventStruct *event, String& string)
         break;
       }
 
-    case NPLUGIN_GET_DEVICENAME:
+    case NPlugin::Function::NPLUGIN_GET_DEVICENAME:
       {
         string = F(NPLUGIN_NAME_002);
         break;
       }
 
-    case NPLUGIN_WRITE:
-      {
-        String log = "";
-        String command = parseString(string, 1);
+    // Edwin: Not used/not implemented, so disabled for now.
+    // case NPlugin::Function::NPLUGIN_WRITE:
+    //   {
+    //     String log = "";
+    //     String command = parseString(string, 1);
+    //
+    //     if (command == F("buzzer"))
+    //     {
+    //       MakeNotificationSettings(NotificationSettings);
+    //       LoadNotificationSettings(event->NotificationIndex, (byte*)&NotificationSettings, sizeof(NotificationSettingsStruct));
+    //       success = true;
+    //     }
+    //     break;
+    //   }
 
-        if (command == F("buzzer"))
-        {
-          NotificationSettingsStruct NotificationSettings;
-          LoadNotificationSettings(event->NotificationIndex, (byte*)&NotificationSettings, sizeof(NotificationSettings));
-          success = true;
-        }
-        break;
-      }
-
-    case NPLUGIN_NOTIFY:
+    case NPlugin::Function::NPLUGIN_NOTIFY:
       {
-        NotificationSettingsStruct NotificationSettings;
-        LoadNotificationSettings(event->NotificationIndex, (byte*)&NotificationSettings, sizeof(NotificationSettings));
-        //this reserves IRAM and uninitalized RAM
-        tone(NotificationSettings.Pin1, 500, 500);
+        MakeNotificationSettings(NotificationSettings);
+        LoadNotificationSettings(event->NotificationIndex, (byte*)&NotificationSettings, sizeof(NotificationSettingsStruct));
+        NotificationSettings.validate();
+        //this reserves IRAM and uninitialized RAM
+        #ifndef ESP32
+        // Buzzer not compatible with ESP32 due to lack of tone command.
+        tone_espEasy(NotificationSettings.Pin1, 500, 500);
+        #endif
         success = true;
       }
+
+    default:
+      break;
 
   }
   return success;
 }
+#endif
